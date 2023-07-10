@@ -14,86 +14,92 @@ protocol SendingTextDelegate {
 
 class FirstScreen: UIViewController  {
     
+    private enum Strings {
+        static let labelName = "LABEL"
+        static let buttonName = "BUTTON"
+        static let textFieldName = "TEXT FIELD"
+    }
     
+    private enum Constants {
+        static let labelToTextFieldDistance = -100
+        static let buttonToTextFieldDistance = 50
+        static let buttonToButtonDistance = 50
+     }
     
-    var label2: UILabel!
-    var button2: UIButton!
-    var textField2: UITextField!
-    var buttonToSecondScreen: UIButton!
-    var secondScreen: UIViewController!
-    var sendingTextDelegate: SendingTextDelegate!
+    private let label: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = Strings.labelName
+        return label
+    }()
     
+    private let button: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle(Strings.buttonName, for: .normal)
+        button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+        return button
+    }()
     
+    private let textField: UITextField = {
+        let textField = UITextField()
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.textAlignment = .center
+        textField.text = Strings.textFieldName
+        textField.isUserInteractionEnabled = true
+        return textField
+    }()
+    
+    private let buttonToSecondScreen: UIButton = {
+        let buttonToSecondScreen = UIButton(type: .system)
+        buttonToSecondScreen.translatesAutoresizingMaskIntoConstraints = false
+        buttonToSecondScreen.setTitle("NEXT SCREEN", for: .normal)
+        buttonToSecondScreen.addTarget(self, action: #selector(buttonToSecondScreenTapped), for: .touchUpInside)
+        return buttonToSecondScreen
+    }()
+    
+    var secondScreen = SecondScreen()
+    var sendingTextDelegate: SendingTextDelegate = secondScreen as SendingTextDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupView()
+        setupConstraints()
+    }
+    
+    private func setupView() {
         view.backgroundColor = .white
-        
-        secondScreen = SecondScreen()
-        sendingTextDelegate = secondScreen as? SendingTextDelegate
-        
-        
-        label2 = UILabel()
-        label2.translatesAutoresizingMaskIntoConstraints = false
-        label2.text = "LABEL"
-        view.addSubview(label2)
-        
-        textField2 = UITextField()
-        textField2.translatesAutoresizingMaskIntoConstraints = false
-        textField2.textAlignment = .center
-        textField2.text = "TEXT FIELD"
-        textField2.isUserInteractionEnabled = true
-        view.addSubview(textField2)
-        
-        button2 = UIButton(type: .system)
-        button2.translatesAutoresizingMaskIntoConstraints = false
-        button2.setTitle("BUTTON", for: .normal)
-        button2.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
-        view.addSubview(button2)
-        
-        buttonToSecondScreen = UIButton(type: .system)
-        buttonToSecondScreen.translatesAutoresizingMaskIntoConstraints = false
-        buttonToSecondScreen.setTitle("NEXT SCREEN", for: .normal)
-        buttonToSecondScreen.addTarget(self, action: #selector(buttonToSecondScreenTapped), for: .touchUpInside)
+        view.addSubview(label)
+        view.addSubview(textField)
+        view.addSubview(button)
         view.addSubview(buttonToSecondScreen)
-
-        
-        
+    }
+    
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
-            label2.centerXAnchor.constraint(equalTo: view.layoutMarginsGuide.centerXAnchor, constant: 0),
-            label2.bottomAnchor.constraint(equalTo: textField2.topAnchor, constant: -100),
+            label.centerXAnchor.constraint(equalTo: view.layoutMarginsGuide.centerXAnchor),
+            label.bottomAnchor.constraint(equalTo: textField.topAnchor, constant: CGFloat(Constants.labelToTextFieldDistance)),
             
-            textField2.centerXAnchor.constraint(equalTo: view.layoutMarginsGuide.centerXAnchor, constant: 0),
-            textField2.centerYAnchor.constraint(equalTo: view.layoutMarginsGuide.centerYAnchor, constant: 0),
+            textField.centerXAnchor.constraint(equalTo: view.layoutMarginsGuide.centerXAnchor),
+            textField.centerYAnchor.constraint(equalTo: view.layoutMarginsGuide.centerYAnchor),
             
-            button2.centerXAnchor.constraint(equalTo: view.layoutMarginsGuide.centerXAnchor, constant: 0),
-            button2.topAnchor.constraint(equalTo: textField2.bottomAnchor, constant: 50),
+            button.centerXAnchor.constraint(equalTo: view.layoutMarginsGuide.centerXAnchor),
+            button.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: CGFloat(Constants.buttonToTextFieldDistance)),
             
-            buttonToSecondScreen.centerXAnchor.constraint(equalTo: view.layoutMarginsGuide.centerXAnchor, constant: 0),
-            buttonToSecondScreen.topAnchor.constraint(equalTo: button2.bottomAnchor, constant: 50)
+            buttonToSecondScreen.centerXAnchor.constraint(equalTo: view.layoutMarginsGuide.centerXAnchor),
+            buttonToSecondScreen.topAnchor.constraint(equalTo: button.bottomAnchor, constant: CGFloat(Constants.buttonToButtonDistance))
         ])
     }
-
-    
     
     @objc func buttonTapped(_ sender: UIButton) {
-        label2.text = textField2.text
-        sendingTextDelegate.didSendText(text: textField2.text!)
+        label.text = textField.text
+        sendingTextDelegate.didSendText(text: textField.text!)
         
     }
     
     @objc func buttonToSecondScreenTapped(_ sender: UIButton) {
-        
-        
-        navigationController?.pushViewController(secondScreen!, animated: false)
+        navigationController?.pushViewController(secondScreen, animated: false)
     }
-
-
-    
-    
-    
-    
-    
 }
 

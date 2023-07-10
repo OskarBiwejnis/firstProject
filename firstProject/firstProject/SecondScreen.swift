@@ -9,30 +9,38 @@ import UIKit
 
 class SecondScreen: UIViewController, SendingTextDelegate {
     
-    var labelOnSecondScreen: UILabel!
+    private enum Strings {
+        static let labelName = "LABEL"
+    }
+    
+    private let label: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "LABEL"
+        return label
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemGreen
         
-        labelOnSecondScreen = UILabel()
-        labelOnSecondScreen.translatesAutoresizingMaskIntoConstraints = false
-        labelOnSecondScreen.text = "LABEL"
-        view.addSubview(labelOnSecondScreen)
-        
-        
-        NSLayoutConstraint.activate([
-            labelOnSecondScreen.centerXAnchor.constraint(equalTo: view.layoutMarginsGuide.centerXAnchor, constant: 0),
-            labelOnSecondScreen.centerYAnchor.constraint(equalTo: view.layoutMarginsGuide.centerYAnchor, constant: 0),
-        ])
-        print("jestem")
-         
+        setupView()
+        setupConstraints()
     }
     
+    private func setupView() {
+        view.backgroundColor = .systemGreen
+        view.addSubview(label)
+    }
+    
+    private func setupConstraints() {
+        NSLayoutConstraint.activate([
+            label.centerXAnchor.constraint(equalTo: view.layoutMarginsGuide.centerXAnchor),
+            label.centerYAnchor.constraint(equalTo: view.layoutMarginsGuide.centerYAnchor),
+        ])
+    }
     
     func didSendText(text: String) {
-        labelOnSecondScreen.text = text
-
+        label.text = text
     }
 
 }
