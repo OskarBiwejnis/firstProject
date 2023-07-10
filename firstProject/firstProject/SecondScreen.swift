@@ -13,6 +13,8 @@ class SecondScreen: UIViewController {
     private enum Strings {
         static let labelName = "LABEL"
         static let buttonName = "BUTTON"
+        static let requestTextNotificationKey = "requestTextNotification"
+        static let sendTextNotificationKey = "sendTextNotification"
     }
     
     private enum Constants {
@@ -33,8 +35,7 @@ class SecondScreen: UIViewController {
         button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
         return button
     }()
-    
-    var getText: (() -> String?)?
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,6 +45,7 @@ class SecondScreen: UIViewController {
     }
     
     private func setupView() {
+        NotificationCenter.default.addObserver(self, selector: #selector(didSendText), name: Notification.Name(Strings.sendTextNotificationKey), object: nil)
         view.backgroundColor = .systemGreen
         view.addSubview(label)
         view.addSubview(button)
@@ -60,7 +62,14 @@ class SecondScreen: UIViewController {
     }
     
     @objc func buttonTapped(_ sender: UIButton) {
-        label.text = getText?()
+        NotificationCenter.default.post(name: Notification.Name(Strings.requestTextNotificationKey), object: nil)
     }
-
+    
+    @objc func didSendText(_ notification: NSNotification) {
+        if let userInfo = notification.userInfo {
+            if let text = userInfo["text"] as? String {
+                label.text = text
+                }
+            }
+    }
 }

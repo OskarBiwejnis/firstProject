@@ -16,6 +16,8 @@ class FirstScreen: UIViewController  {
         static let buttonName = "BUTTON"
         static let textFieldName = "TEXT FIELD"
         static let buttonToSecondScreenName = "NEXT SCREEN"
+        static let requestTextNotificationKey = "requestTextNotification"
+        static let sendTextNotificationKey = "sendTextNotification"
     }
     
     private enum Constants {
@@ -66,7 +68,7 @@ class FirstScreen: UIViewController  {
     }
     
     private func setupView() {
-        secondScreen.getText = getText
+        NotificationCenter.default.addObserver(self, selector: #selector(sendBackNotification), name: Notification.Name(Strings.requestTextNotificationKey), object: nil)
         view.backgroundColor = .white
         view.addSubview(label)
         view.addSubview(textField)
@@ -90,8 +92,8 @@ class FirstScreen: UIViewController  {
         ])
     }
     
-    func getText() -> String? {
-        return textField.text
+    @objc func sendBackNotification() {
+        NotificationCenter.default.post(name: Notification.Name(Strings.sendTextNotificationKey), object: nil, userInfo: ["text" : textField.text] )
     }
     
     @objc func buttonTapped(_ sender: UIButton) {
