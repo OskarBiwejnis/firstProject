@@ -7,17 +7,15 @@
 
 import UIKit
 
-protocol SendingTextDelegate {
-    func didSendText (text: String) 
-}
 
 
-class FirstScreen: UIViewController  {
+class FirstScreen: UIViewController, SendingTextDelegate  {
     
     private enum Strings {
         static let labelName = "LABEL"
         static let buttonName = "BUTTON"
         static let textFieldName = "TEXT FIELD"
+        static let buttonToSecondScreenName = "NEXT SCREEN"
     }
     
     private enum Constants {
@@ -53,13 +51,13 @@ class FirstScreen: UIViewController  {
     private let buttonToSecondScreen: UIButton = {
         let buttonToSecondScreen = UIButton(type: .system)
         buttonToSecondScreen.translatesAutoresizingMaskIntoConstraints = false
-        buttonToSecondScreen.setTitle("NEXT SCREEN", for: .normal)
+        buttonToSecondScreen.setTitle(Strings.buttonToSecondScreenName, for: .normal)
         buttonToSecondScreen.addTarget(self, action: #selector(buttonToSecondScreenTapped), for: .touchUpInside)
         return buttonToSecondScreen
     }()
     
     var secondScreen = SecondScreen()
-    var sendingTextDelegate: SendingTextDelegate = secondScreen as SendingTextDelegate
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,6 +67,7 @@ class FirstScreen: UIViewController  {
     }
     
     private func setupView() {
+        secondScreen.sendingTextDelegate = self
         view.backgroundColor = .white
         view.addSubview(label)
         view.addSubview(textField)
@@ -92,12 +91,14 @@ class FirstScreen: UIViewController  {
         ])
     }
     
-    @objc func buttonTapped(_ sender: UIButton) {
-        label.text = textField.text
-        sendingTextDelegate.didSendText(text: textField.text!)
-        
+    func didTapButton() -> String? {
+        return textField.text
     }
     
+    @objc func buttonTapped(_ sender: UIButton) {
+        label.text = textField.text
+    }
+
     @objc func buttonToSecondScreenTapped(_ sender: UIButton) {
         navigationController?.pushViewController(secondScreen, animated: false)
     }
