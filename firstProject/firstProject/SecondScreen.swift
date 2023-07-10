@@ -7,27 +7,32 @@
 
 import UIKit
 
-class SecondScreen: UIViewController {
-
-
+class SecondScreen: UIViewController, SendingTextDelegate {
+    
+    var labelOnSecondScreen: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemGreen
-        // Do any additional setup after loading the view.
+        
+        labelOnSecondScreen = UILabel()
+        labelOnSecondScreen.translatesAutoresizingMaskIntoConstraints = false
+        labelOnSecondScreen.text = "LABEL"
+        view.addSubview(labelOnSecondScreen)
+        
+        
+        NSLayoutConstraint.activate([
+            labelOnSecondScreen.centerXAnchor.constraint(equalTo: view.layoutMarginsGuide.centerXAnchor, constant: 0),
+            labelOnSecondScreen.centerYAnchor.constraint(equalTo: view.layoutMarginsGuide.centerYAnchor, constant: 0),
+        ])
+        print("jestem")
+         
     }
     
     
-    
+    func didSendText(text: String) {
+        labelOnSecondScreen.text = text
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
     }
-    */
 
 }

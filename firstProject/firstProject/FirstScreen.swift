@@ -7,38 +7,32 @@
 
 import UIKit
 
-protocol WorkerDelegate: AnyObject {
-    func didFinishWork()
+protocol SendingTextDelegate {
+    func didSendText (text: String) 
 }
 
-class FirstScreen: UIViewController, WorkerDelegate {
-    func didFinishWork() {
-        <#code#>
-    }
+
+class FirstScreen: UIViewController  {
+    
     
     
     var label2: UILabel!
     var button2: UIButton!
     var textField2: UITextField!
     var buttonToSecondScreen: UIButton!
+    var secondScreen: UIViewController!
+    var sendingTextDelegate: SendingTextDelegate!
     
-    class Worker {
-        weak var delegate: WorkerDelegate?
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
-        func startWork() {
-            delegate?.didFinishWork()
-        }
-    }
-    
-    private let worker = Worker()
-    
-    
-    
-    
-    
-    override func loadView() {
-        view = UIView()
         view.backgroundColor = .white
+        
+        secondScreen = SecondScreen()
+        sendingTextDelegate = secondScreen as? SendingTextDelegate
+        
         
         label2 = UILabel()
         label2.translatesAutoresizingMaskIntoConstraints = false
@@ -78,38 +72,24 @@ class FirstScreen: UIViewController, WorkerDelegate {
             
             buttonToSecondScreen.centerXAnchor.constraint(equalTo: view.layoutMarginsGuide.centerXAnchor, constant: 0),
             buttonToSecondScreen.topAnchor.constraint(equalTo: button2.bottomAnchor, constant: 50)
-
         ])
     }
+
     
-    
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        worker.delegate = self
-        
-        worker.startWork()
-    }
     
     @objc func buttonTapped(_ sender: UIButton) {
         label2.text = textField2.text
+        sendingTextDelegate.didSendText(text: textField2.text!)
+        
     }
     
     @objc func buttonToSecondScreenTapped(_ sender: UIButton) {
-        let secondScreen = SecondScreen()
-        navigationController?.pushViewController(secondScreen, animated: false)
+        
+        
+        navigationController?.pushViewController(secondScreen!, animated: false)
     }
 
-    /*@IBOutlet weak var button1: UIButton!
-    @IBOutlet weak var textField1: UITextField!
-    @IBOutlet weak var label1: UILabel!
-    
-    @IBAction func onButton(_ sender: UIButton) {
-        label1.text = textField1.text
-    }
-    */
-    
+
     
     
     
