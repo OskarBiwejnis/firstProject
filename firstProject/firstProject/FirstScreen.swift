@@ -58,7 +58,6 @@ class FirstScreen: UIViewController, SendingTextDelegate  {
     
     var secondScreen = SecondScreen()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
