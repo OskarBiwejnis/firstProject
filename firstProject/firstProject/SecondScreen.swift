@@ -7,9 +7,6 @@
 
 import UIKit
 
-protocol SendingTextDelegate {
-    func didTapButton () -> String?
-}
 
 class SecondScreen: UIViewController {
     
@@ -37,7 +34,7 @@ class SecondScreen: UIViewController {
         return button
     }()
     
-    var sendingTextDelegate: SendingTextDelegate?
+    var getText: (() -> String?)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,7 +60,7 @@ class SecondScreen: UIViewController {
     }
     
     @objc func buttonTapped(_ sender: UIButton) {
-        label.text = sendingTextDelegate?.didTapButton()
+        label.text = getText?()
     }
 
 }
