@@ -9,7 +9,7 @@ import UIKit
 
 
 
-class FirstScreen: UIViewController, SendingTextDelegate  {
+class FirstScreen: UIViewController  {
     
     private enum Strings {
         static let labelName = "LABEL"
@@ -66,7 +66,7 @@ class FirstScreen: UIViewController, SendingTextDelegate  {
     }
     
     private func setupView() {
-        secondScreen.sendingTextDelegate = self
+        secondScreen.getText = getText
         view.backgroundColor = .white
         view.addSubview(label)
         view.addSubview(textField)
@@ -90,7 +90,7 @@ class FirstScreen: UIViewController, SendingTextDelegate  {
         ])
     }
     
-    func didTapButton() -> String? {
+    func getText() -> String? {
         return textField.text
     }
     
